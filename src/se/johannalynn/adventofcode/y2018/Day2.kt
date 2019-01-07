@@ -11,7 +11,7 @@ object Day2 {
     fun main(args: Array<String>) {
         println("Day2")
 
-        val inFileName = "2018/input/day2_pre2.txt"
+        val inFileName = "2018/input/day2.txt"
         val scanner = Scanner(File(inFileName))
 
         //star1(scanner)
@@ -56,7 +56,49 @@ object Day2 {
         println(twos * threes)
     }
 
+    private fun hash(id: String): Int {
+        var sum = 0
+        id.toUpperCase().toCharArray().forEachIndexed { index, it ->  sum += ((index+1) * (it.toInt() - 64) ) }
+        return sum
+    }
+
     private fun star2(scanner: Scanner) {
-        
+        val idList = ArrayList<String>()
+
+        while (scanner.hasNextLine()) {
+            val id = scanner.nextLine()
+            // val hash = hash(id)
+            idList.add(id)
+        }
+
+        for (id1 in idList) {
+            for (id2 in idList) {
+
+                var idx = 0
+                var missmatches = 0
+                var missmatchIdx = -1
+                while(idx < id1.length) {
+                    if(id1[idx] != id2[idx]) {
+                        missmatches++
+                        missmatchIdx = idx
+                    }
+
+                    if(missmatches > 1) {
+                        break
+                    }
+
+                    idx++
+                }
+
+                if (missmatches == 0) {
+                    break
+                }
+
+                if (missmatches == 1) {
+                    println(id1.removeRange(missmatchIdx, missmatchIdx+1))
+                }
+            }
+        }
+
     }
 }

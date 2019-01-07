@@ -2,6 +2,7 @@ package se.johannalynn.adventofcode.y2018
 
 import java.io.File
 import java.io.FileNotFoundException
+import java.util.ArrayList
 import java.util.Scanner
 
 object Day3_converted {
@@ -12,16 +13,17 @@ object Day3_converted {
         println("Day3_java")
 
         // #1 @ 1,3: 4x4
-        val inFileName = "2018/input/day3_pre1.txt"
+        val inFileName = "2018/input/day3.txt"
         val scanner = Scanner(File(inFileName))
 
-        star1(scanner)
+        //star1(scanner);
+        star2(scanner)
     }
 
-    private fun star1(scanner: Scanner) {
-        val fabric = Array(1000) { IntArray(1000) }
+    internal class Elf(var id: Int, var left: Int, var top: Int, var width: Int, var height: Int)
 
-        var count = 0
+    private fun getElves(scanner: Scanner): List<Elf> {
+        val elves = ArrayList<Elf>()
         while (scanner.hasNextLine()) {
             val elf = scanner.nextLine().split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             val id = Integer.valueOf(elf[0].substring(1))
@@ -33,8 +35,21 @@ object Day3_converted {
             val width = Integer.valueOf(dimension[0])
             val height = Integer.valueOf(dimension[1])
 
-            for (i in left until left + width) {
-                for (j in top until top + height) {
+            val newElf = Elf(id, left, top, width, height)
+            elves.add(newElf)
+
+        }
+        return elves
+    }
+
+    private fun star1(scanner: Scanner) {
+        val fabric = Array(1000) { IntArray(1000) }
+
+        var count = 0
+        val elves = getElves(scanner)
+        for (elf in elves) {
+            for (i in elf.left until elf.left + elf.width) {
+                for (j in elf.top until elf.top + elf.height) {
                     val square = fabric[i][j]
                     if (square == 0) {
                         fabric[i][j]++
@@ -48,5 +63,32 @@ object Day3_converted {
 
         println(count)
 
+    }
+
+    private fun star2(scanner: Scanner) {
+        val fabric = Array(1000) { IntArray(1000) }
+        val elves = getElves(scanner)
+
+        for (elf in elves) {
+            for (i in elf.left until elf.left + elf.width) {
+                for (j in elf.top until elf.top + elf.height) {
+                    fabric[i][j]++
+                }
+            }
+        }
+        for (elf in elves) {
+            var claimed = false
+            for (i in elf.left until elf.left + elf.width) {
+                for (j in elf.top until elf.top + elf.height) {
+                    val square = fabric[i][j]
+                    if (square != 1) {
+                        claimed = true
+                    }
+                }
+            }
+            if (!claimed) {
+                println(elf.id)
+            }
+        }
     }
 }

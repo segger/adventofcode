@@ -2,6 +2,8 @@ package se.johannalynn.adventofcode.y2018;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Day3_java {
@@ -10,16 +12,31 @@ public class Day3_java {
         System.out.println("Day3_java");
 
         // #1 @ 1,3: 4x4
-        String inFileName = "2018/input/day3_pre1.txt";
+        String inFileName = "2018/input/day3.txt";
         Scanner scanner = new Scanner(new File(inFileName));
 
-        star1(scanner);
+        //star1(scanner);
+        star2(scanner);
     }
 
-    private static void star1(Scanner scanner) {
-        int[][] fabric = new int[1000][1000];
+    static class Elf {
+        int id;
+        int left;
+        int top;
+        int width;
+        int height;
 
-        int count = 0;
+        Elf(int id, int left, int top, int width, int height) {
+            this.id = id;
+            this.left = left;
+            this.top = top;
+            this.width = width;
+            this.height = height;
+        }
+    }
+
+    private static List<Elf> getElves(Scanner scanner) {
+        List<Elf> elves = new ArrayList<>();
         while(scanner.hasNextLine()) {
             String[] elf = scanner.nextLine().split(" ");
             int id = Integer.valueOf(elf[0].substring(1));
@@ -31,8 +48,21 @@ public class Day3_java {
             int width = Integer.valueOf(dimension[0]);
             int height = Integer.valueOf(dimension[1]);
 
-            for(int i = left; i < left + width; i++) {
-                for(int j = top; j < top + height; j++) {
+            Elf newElf = new Elf(id, left, top, width, height);
+            elves.add(newElf);
+
+        }
+        return elves;
+    }
+
+    private static void star1(Scanner scanner) {
+        int[][] fabric = new int[1000][1000];
+
+        int count = 0;
+        List<Elf> elves = getElves(scanner);
+        for(Elf elf : elves) {
+            for(int i = elf.left; i < elf.left + elf.width; i++) {
+                for(int j = elf.top; j < elf.top + elf.height; j++) {
                     int square = fabric[i][j];
                     if(square == 0) {
                         fabric[i][j]++;
@@ -46,5 +76,32 @@ public class Day3_java {
 
         System.out.println(count);
 
+    }
+
+    private static void star2(Scanner scanner) {
+        int[][] fabric = new int[1000][1000];
+        List<Elf> elves = getElves(scanner);
+
+        for(Elf elf : elves) {
+            for(int i = elf.left; i < elf.left + elf.width; i++) {
+                for(int j = elf.top; j < elf.top + elf.height; j++) {
+                    fabric[i][j]++;
+                }
+            }
+        }
+        for(Elf elf : elves) {
+            boolean claimed = false;
+            for(int i = elf.left; i < elf.left + elf.width; i++) {
+                for(int j = elf.top; j < elf.top + elf.height; j++) {
+                    int square = fabric[i][j];
+                    if(square != 1) {
+                        claimed = true;
+                    }
+                }
+            }
+            if(!claimed) {
+                System.out.println(elf.id);
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-package se.johannalynn.adventofcode;
+package se.johannalynn.adventofcode.y2018;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -9,7 +9,9 @@ object Day6 {
     fun main(args: Array<String>) {
         val scanner = Day.start(6, false)
 
-        star1(scanner)
+        val distMax = 10000
+        //star1(scanner)
+        star2(scanner, distMax)
     }
 
     private fun star1(scanner: Scanner) {
@@ -75,6 +77,53 @@ object Day6 {
         }
         val max = definite.maxBy { it.value }
         println(max!!.value)
+    }
+
+    private fun star2(scanner: Scanner, distMax: Int) {
+
+        var minX = Int.MAX_VALUE;
+        var minY = Int.MAX_VALUE;
+        var maxX = Int.MIN_VALUE;
+        var maxY = Int.MIN_VALUE;
+
+        val points = ArrayList<IntArray>()
+        while(scanner.hasNextLine()) {
+            val vector = scanner.nextLine().split(", ")
+            val x = vector[0].toInt()
+            val y = vector[1].toInt()
+            points.add(intArrayOf(x, y))
+
+            if(x < minX) {
+                minX = x
+            }
+            if(x > maxX) {
+                maxX = x
+            }
+            if(y < minY) {
+                minY = y
+            }
+            if(y > maxY) {
+                maxY = y
+            }
+        }
+
+        var region = 0
+        var manhattan = Array(maxY + 1){ IntArray(maxX + 1) }
+        for((i, arr) in manhattan.withIndex()) {
+            for((j, ch) in arr.withIndex()) {
+                var totDistance = 0
+                for(point in points) {
+                    var distance = distanceTo(i, j, point[1], point[0])
+                    totDistance += distance
+                }
+                manhattan[i][j] = totDistance
+                if (totDistance < distMax) {
+                    region++
+                }
+            }
+        }
+
+        println(region)
     }
 
     private fun distanceTo(iy: Int, ix: Int, y: Int, x: Int): Int {

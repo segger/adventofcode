@@ -7,40 +7,64 @@ object Day11 {
         println("Day 11")
 
         val input = 2568
-        //val input = 42
-        star1(input)
+        //val input = 18 //90,269,16
+        //val input = 42 //232,251,12
+        star2(input)
     }
 
-    private fun star1(input: Int) {
-        val grid = Array(301) { IntArray(301)}
-        for (i in 1..300) {
-            for(j in 1..300) {
+    private fun star2(input: Int) {
+        val squareSize = 300
+
+        val grid = Array(squareSize+1) { IntArray(squareSize+1)}
+        for (i in 1..squareSize) {
+            for(j in 1..squareSize) {
                 val powerLevel = calc(i, j, input)
                 grid[i][j] = powerLevel
+                //print(" " + grid[i][j])
             }
+            //println()
         }
 
         var max = Int.MIN_VALUE
         var max_x = 0;
         var max_y = 0;
-        for (i in 1..300-2) {
-            for(j in 1..300-2) {
+        var maxInputSize = 0;
+
+        for (i in 1..squareSize-2) {
+            for (j in 1..squareSize-2) {
+
+                //println("i=$i, j=$j")
 
                 var square = 0
-                for(m in 0..2) {
-                    for(n in 0..2) {
-                        val value = grid[i+m][j+n]
-                        square += value
+                val value = grid[i][j] + grid[i][j + 1]+grid[i + 1][j] + grid[i + 1][j + 1]
+
+                var size = 2
+                square += value
+                //println("size=$size, square=$square")
+
+                while (i + size <= squareSize && j + size <= squareSize) {
+                    for (k in 0..size-1) {
+                        square += grid[i + size][j + k]
+                        //println("-> square=$square")
+                        square += grid[i + k][j + size]
+                        //println("--> square=$square")
                     }
-                }
-                if (square > max) {
-                    max = square
-                    max_x = i
-                    max_y = j
+                    square += grid[i+size][j+size]
+
+                    //println("=> size-1=$size, square=$square")
+                    if (square > max) {
+                        max = square
+                        max_x = i
+                        max_y = j
+                        maxInputSize = size+1
+                    }
+                    size++
                 }
             }
         }
-        println("$max for ($max_x, $max_y)")
+
+
+        println("$max for ($max_x,$max_y,$maxInputSize)")
     }
 
     private fun calc(x: Int, y: Int, serial: Int): Int {

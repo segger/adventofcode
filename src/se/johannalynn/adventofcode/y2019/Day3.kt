@@ -18,7 +18,65 @@ U98,R91,D20,R16,D67,R40,U7,R15,U6,R7
     fun main(args: Array<String>) {
         val scanner = Day.start(3, false)
 
-        star1(scanner)
+        //star1(scanner)
+        star2(scanner)
+    }
+
+    fun star2(scanner: Scanner) {
+        var positions = HashMap<String, Int>()
+
+        while(scanner.hasNextLine()) {
+            val wire1 = scanner.nextLine().split(",")
+
+            var posX = 0
+            var posY = 0
+            var steps = 1
+            wire1.forEach {
+                val direction = it.substring(0,1)
+                val length = it.substring(1).toInt()
+
+                for (i in 0..length-1) {
+                    when(direction) {
+                        "R" -> posX++
+                        "L" -> posX--
+                        "U" -> posY++
+                        "D" -> posY--
+                    }
+                    // cross with itself...
+                    positions.put("${posX},${posY}", steps++)
+                }
+            }
+
+            var minSteps = Int.MAX_VALUE
+            posX = 0
+            posY = 0
+            steps = 1
+            val wire2 = scanner.nextLine().split(",")
+            wire2.forEach {
+                val direction = it.substring(0,1)
+                val length = it.substring(1).toInt()
+
+                for (i in 0..length-1) {
+                    when(direction) {
+                        "R" -> posX++
+                        "L" -> posX--
+                        "U" -> posY++
+                        "D" -> posY--
+                    }
+
+                    val cross = positions.contains("${posX},${posY}")
+                    if(cross) {
+                        val wire1steps = positions.get("${posX},${posY}")
+                        val totSteps = steps + wire1steps!!
+                        if (totSteps < minSteps) {
+                            minSteps = totSteps
+                        }
+                    }
+                    steps++
+                }
+            }
+            println(minSteps)
+        }
     }
 
     fun star1(scanner: Scanner) {
@@ -75,5 +133,4 @@ U98,R91,D20,R16,D67,R40,U7,R15,U6,R7
             println(minDistance)
         }
     }
-
 }

@@ -8,25 +8,27 @@ object Day5 {
     fun main(args: Array<String>) {
         val scanner = Day.start(5, false)
 
-        star1(scanner)
+        //stars(scanner, 1)
+        stars(scanner, 5)
     }
 
-    fun star1(scanner: Scanner) {
+    fun stars(scanner: Scanner, systemId: Int) {
         while(scanner.hasNextLine()) {
             val input = scanner.nextLine().split(",").map { it.toInt() }.toMutableList()
-            val result = calc(input)
-            // print(result)
+            //println(input[247])
+            calc(input, systemId)
         }
     }
 
-    fun calc(memory: MutableList<Int>): Int {
+    fun calc(memory: MutableList<Int>, systemId: Int): Int {
         var idx = 0
         val instruction = memory[0].toString().padStart(2, '0')
         var opcode = instruction.substring(instruction.length - 2).toInt()
         var mode = instruction.substring(0, instruction.length - 2)
-
+        //var count = 0
         while(opcode != 99) {
-            // println("opcode: ${opcode}")
+            //count++
+            //println("opcode: ${opcode}")
             if(opcode == 1 || opcode == 2) {
                 mode = mode.padStart(3, '0')
                 val param1mode = mode[2].toString().toInt()
@@ -56,12 +58,58 @@ object Day5 {
                     param1 = memory[memory[idx + 1]]
                 }
                 if (opcode == 3) {
-                    memory[memory[idx + 1]] = 1 // always mode 0, air condition input
+                    memory[memory[idx + 1]] = systemId // always mode 0
                 } else {
                     val output = param1
                     println("output: ${output}")
                 }
                 idx += 2
+            } else if (opcode == 5 || opcode == 6) {
+                mode = mode.padStart(2, '0')
+                val param1mode = mode[1].toString().toInt()
+                var param1 = memory[idx + 1]
+                if (param1mode == 0) {
+                    param1 = memory[memory[idx + 1]]
+                }
+                val param2mode = mode[0].toString().toInt()
+                var param2 = memory[idx + 2]
+                if (param2mode == 0) {
+                    param2 = memory[memory[idx + 2]]
+                }
+                if (opcode == 5) {
+                    if (param1 != 0) {
+                        idx = param2
+                    } else {
+                        idx += 3
+                    }
+                }
+                if (opcode == 6) {
+                    if (param1 == 0) {
+                        idx = param2
+                    } else {
+                        idx += 3
+                    }
+                }
+            } else if (opcode == 7 || opcode == 8) {
+                mode = mode.padStart(3, '0')
+                val param1mode = mode[2].toString().toInt()
+                var param1 = memory[idx + 1]
+                if (param1mode == 0) {
+                    param1 = memory[memory[idx + 1]]
+                }
+                val param2mode = mode[1].toString().toInt()
+                var param2 = memory[idx + 2]
+                if (param2mode == 0) {
+                    param2 = memory[memory[idx + 2]]
+                }
+                val param3 = memory[idx + 3]
+                if (opcode == 7) {
+                    memory[param3] = if (param1 < param2) 1 else 0
+                }
+                if (opcode == 8) {
+                    memory[param3] = if (param1 == param2) 1 else 0
+                }
+                idx += 4
             } else {
                 print("Error")
                 break

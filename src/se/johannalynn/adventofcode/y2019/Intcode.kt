@@ -1,11 +1,16 @@
 package se.johannalynn.adventofcode.y2019
 
-class Intcode {
+import java.lang.RuntimeException
 
-    fun day7(memory: MutableList<Int>, phase: Int, input: Int): Int {
-        var setPhase = true
-        var idx = 0
-        val instruction = memory[0].toString().padStart(2, '0')
+class Intcode(val memory: MutableList<Int>, val phase: Int, val name: String) {
+
+    var setPhase = true
+    var idx = 0
+
+    fun amp(input: Int): Int {
+        //println("${name} at ${idx} with ${input}")
+        //println("${memory}")
+        val instruction = memory[idx].toString().padStart(2, '0')
         var opcode = instruction.substring(instruction.length - 2).toInt()
         var mode = instruction.substring(0, instruction.length - 2)
         //var count = 0
@@ -41,16 +46,20 @@ class Intcode {
                     param1 = memory[memory[idx + 1]]
                 }
                 if (opcode == 3 && setPhase) {
+                    //println("setPhase ${name} to ${phase}")
                     memory[memory[idx + 1]] = phase // always mode 0
                     setPhase = false
+                    idx += 2
                 } else if (opcode == 3 && !setPhase) {
+                    //println("input to ${name} is ${input}")
                     memory[memory[idx + 1]] = input // always mode 0
+                    idx += 2
                 } else {
-                    // val output = param1
-                    // println("output: ${output}")
+                    idx += 2
+                    val output = param1
+                    //println("output from ${name} is ${output}")
                     return param1
                 }
-                idx += 2
             } else if (opcode == 5 || opcode == 6) {
                 mode = mode.padStart(2, '0')
                 val param1mode = mode[1].toString().toInt()
@@ -98,8 +107,8 @@ class Intcode {
                 }
                 idx += 4
             } else {
-                print("Error")
-                break
+                print("Error opcode ${opcode}")
+                throw RuntimeException()
             }
 
             val newInstruction = memory[idx].toString().padStart(2, '0')
@@ -107,7 +116,7 @@ class Intcode {
             opcode = newInstruction.substring(newInstruction.length - 2).toInt()
             mode = newInstruction.substring(0, newInstruction.length - 2)
         }
-        print("Exit code")
-        return -1
+        //print("Exit code done for ${name}")
+        throw DoneException()
     }
 }

@@ -15,8 +15,9 @@ object Day9 {
     fun main(args: Array<String>) {
         val scanner = Day.start(9, false)
 
-        star1(scanner)
+        //star1(scanner)
         // 203 (too low)
+        star2(scanner)
     }
 
     fun star1(scanner: Scanner) {
@@ -24,6 +25,14 @@ object Day9 {
             val program = scanner.nextLine().split(",").map { it.toBigInteger() }
             val computer = Intcode2(program.toMutableList())
             computer.boost(BigInteger.ONE)
+        }
+    }
+
+    fun star2(scanner: Scanner) {
+        while (scanner.hasNextLine()) {
+            val program = scanner.nextLine().split(",").map { it.toBigInteger() }
+            val computer = Intcode2(program.toMutableList())
+            computer.boost(BigInteger.TWO)
         }
     }
 }

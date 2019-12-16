@@ -8,8 +8,8 @@ object Day5 {
     fun main(args: Array<String>) {
         val scanner = Day.start(5, false)
 
-        //stars(scanner, 1)
-        stars(scanner, 5)
+        stars(scanner, 1)
+        //stars(scanner, 5)
     }
 
     fun stars(scanner: Scanner, systemId: Int) {

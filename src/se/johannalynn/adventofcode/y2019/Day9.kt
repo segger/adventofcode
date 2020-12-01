@@ -32,7 +32,7 @@ object Day9 {
         while (scanner.hasNextLine()) {
             val program = scanner.nextLine().split(",").map { it.toBigInteger() }
             val computer = Intcode2(program.toMutableList())
-            computer.boost(BigInteger.TWO)
+            // computer.boost(BigInteger.TWO)
         }
     }
 }

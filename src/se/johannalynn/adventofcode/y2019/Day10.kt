@@ -50,7 +50,7 @@ object Day10 {
         }
 
         map.forEach {
-            it.value.sortBy {  }
+            // it.value.sortBy {  }
         }
     }
 

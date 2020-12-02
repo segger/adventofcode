@@ -9,8 +9,8 @@ object Day2 {
     fun main(args: Array<String>) {
         val scanner = start(2, false)
 
-        star1(scanner)
-        // star2(scanner)
+        // star1(scanner)
+        star2(scanner)
     }
 
     private fun star1(scanner: Scanner) {
@@ -35,7 +35,24 @@ object Day2 {
     }
 
     private fun star2(scanner: Scanner) {
+        var count = 0
+        while (scanner.hasNextLine()) {
+            val row = scanner.nextLine()
+            val parts = row.split(":")
+            val rules = parts[0].trim().split(" ")
+            val nbrOf = rules[0].split("-")
+            val pos1 = Integer.parseInt(nbrOf[0])
+            val pos2 = Integer.parseInt(nbrOf[1])
+            val letter = rules[1].trim()
 
+            val password = parts[1].trim()
+
+            val valid = (password[pos1-1].toString() == letter).xor(password[pos2-1].toString() == letter)
+            if(valid) {
+                count++
+            }
+        }
+        println(count)
     }
 
 }

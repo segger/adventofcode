@@ -11,6 +11,7 @@ object Day3 {
         val scanner = start(3, false)
 
         // star1(scanner)
+        // star2ugly(scanner)
         star2(scanner)
     }
 
@@ -32,6 +33,19 @@ object Day3 {
     }
 
     private fun star2(scanner: Scanner) {
+        val matrix = mutableListOf<String>()
+        while (scanner.hasNextLine()) {
+            val row = scanner.nextLine()
+            matrix.add(row)
+        }
+        val rightShift = intArrayOf(1, 3, 5, 7, 1)
+        val rowShift = intArrayOf(1, 1, 1, 1, 2)
+
+        var right = listOf(1, 3, 5, 7, 1)
+        var down = listOf(1, 1, 1, 1, 2)
+    }
+
+    private fun star2ugly(scanner: Scanner) {
         val count = intArrayOf(0, 0, 0, 0)
         val rightShift = intArrayOf(1, 3, 5, 7)
         var right = listOf(1, 3, 5, 7)
@@ -75,5 +89,6 @@ object Day3 {
         val product = count.reduce{ product, factor -> product * factor }
         println(product * countDownTwo)
     }
+
 
 }

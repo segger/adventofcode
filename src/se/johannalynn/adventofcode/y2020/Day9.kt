@@ -12,8 +12,9 @@ object Day9 {
         val scanner = start(9, usePre)
 
         val preamble = if (usePre) 5 else 25
-        star1(scanner, preamble)
-        // star2(scanner)
+        val number = if (usePre) 127L else 248131121L
+        // star1(scanner, preamble)
+        star2(scanner, number)
     }
 
     private fun star1(scanner: Scanner, preamble: Int) {
@@ -62,7 +63,41 @@ object Day9 {
         }
     }
 
-    private fun star2(scanner: Scanner) {
+    private fun star2(scanner: Scanner, number: Long) {
+        // println("number $number")
+        val numbers = mutableListOf<Long>()
+        var found = false
+        var idxStart = 0
+        var idxStop = 0
+        var sum = 0L
+        while (scanner.hasNextLine() && !found) {
+            val input = scanner.nextLine().toLong()
+            numbers.add(input)
+            idxStop++
 
+            sum += input
+            // println("$input -> $sum")
+
+            while (sum >= number && idxStart < idxStop) {
+                sum -= numbers[idxStart]
+                // println("${numbers[idxStart]} -- $sum")
+                idxStart++
+                // println("$idxStart $idxStop")
+                if (sum == number) {
+                    found = true
+                    break
+                }
+            }
+            if (sum == number) {
+                found = true
+            }
+        }
+
+        val range = numbers.subList(idxStart, idxStop)
+        val min = range.min()!!
+        val max = range.max()!!
+        // println("min $min max $max")
+        val tot = min + max
+        println(tot)
     }
 }

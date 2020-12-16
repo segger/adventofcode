@@ -58,8 +58,8 @@ object Day10 {
     fun main(args: Array<String>) {
         val scanner = start(10, false)
 
-        star1(scanner)
-        // star2(scanner)
+        // star1(scanner)
+        star2(scanner)
     }
 
     private fun star1(scanner: Scanner) {
@@ -89,7 +89,109 @@ object Day10 {
         println(tot)
     }
 
-    private fun star2(scanner: Scanner) {
+    private fun star2desc(scanner: Scanner) {
+        var adapters = mutableListOf<Int>()
+        while (scanner.hasNextLine()) {
+            val input = Integer.parseInt(scanner.nextLine())
+            adapters.add(input)
+        }
+        adapters = adapters.sortedDescending().toMutableList()
 
+        val deviceJolt = adapters.first() + 3
+        val arrangements = mutableMapOf<Int, Adapter>()
+        arrangements[deviceJolt] = Adapter(deviceJolt)
+        val orphans = mutableSetOf<Int>()
+        orphans.add(deviceJolt)
+        adapters.forEach {adapter ->
+            orphans.forEach {orphan ->
+                // println("$adapter $orphan")
+                val diff = abs(adapter - orphan)
+                if (diff <= 3) {
+                    var tmp = arrangements[adapter]
+                    if (tmp == null) {
+                        tmp = Adapter(adapter)
+                    }
+                    tmp.parents.add(orphan)
+                    arrangements[adapter] = tmp
+                }
+            }
+            orphans.add(adapter)
+            // remove old?
+        }
+        var sum = 1
+        arrangements.forEach {
+            val paths = it.value.parents.size
+            if (paths > 1) {
+                sum += paths
+            }
+            /*
+            println("KEY ${it.key}")
+            it.value.parents.forEach {
+                print("$it, ")
+            }
+            println()*/
+        }
+        println(sum)
+    }
+
+    private fun star2(scanner: Scanner) {
+        var adapters = mutableListOf<Int>()
+        while (scanner.hasNextLine()) {
+            val input = Integer.parseInt(scanner.nextLine())
+            adapters.add(input)
+        }
+        adapters = adapters.sortedDescending().toMutableList()
+        adapters.add(0)
+
+        val deviceJolt = adapters.first() + 3
+        var arrangements = mutableMapOf<Int, Adapter>()
+        arrangements[deviceJolt] = Adapter(deviceJolt)
+        val orphans = mutableSetOf<Int>()
+        orphans.add(deviceJolt)
+        adapters.forEach {adapter ->
+            orphans.forEach {orphan ->
+                // println("$adapter $orphan")
+                val diff = abs(adapter - orphan)
+                if (diff <= 3) {
+                    var tmp = arrangements[adapter]
+                    if (tmp == null) {
+                        tmp = Adapter(adapter)
+                    }
+                    tmp.parents.add(orphan)
+                    arrangements[adapter] = tmp
+                }
+            }
+            orphans.add(adapter)
+            // remove old?
+        }
+
+        arrangements = arrangements.toSortedMap()
+        val items = mutableMapOf<Int, Long>()
+        items.put(arrangements.keys.first(), 1)
+        arrangements.forEach {entry ->
+            // println("KEY ${entry.key}")
+            var nbrOf = items[entry.key]
+            if (nbrOf == null) {
+                nbrOf = 1L
+            }
+            entry.value.parents.forEach {
+                var value = items[it]
+                if (value == null) {
+                    value = 0L
+                }
+                items[it] = value + nbrOf
+            }
+        }
+
+        items.forEach {
+            println("KEY ${it.key} VALUE: ${it.value}")
+        }
+
+        val permutations = items[deviceJolt]
+        println(permutations)
+    }
+
+    class Adapter(jolt: Int) {
+        val parents = mutableSetOf<Int>()
     }
 }

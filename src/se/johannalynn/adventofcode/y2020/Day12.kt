@@ -10,16 +10,16 @@ object Day12 {
     fun main(args: Array<String>) {
         val scanner = start(12, false)
 
-        star1(scanner)
+        // star1(scanner)
         // 3703 - too high
         // 1013 - too low
 
-        // star2(scanner)
+        star2(scanner)
     }
 
     private fun star1(scanner: Scanner) {
         var heading = 0 // east
-        var position = Position(0, 0)
+        val position = Position(0, 0)
         while (scanner.hasNextLine()) {
             val input = scanner.nextLine()
             val action = input.substring(0, 1)
@@ -57,7 +57,62 @@ object Day12 {
     }
 
     private fun star2(scanner: Scanner) {
+        val position = Position(0, 0)
+        var waypoint = Position(10, -1)
+        while (scanner.hasNextLine()) {
+            val input = scanner.nextLine()
+            val action = input.substring(0, 1)
+            val value = Integer.parseInt(input.substring(1))
 
+            when (action) {
+                "N" -> waypoint.y -= value
+                "S" -> waypoint.y += value
+                "E" -> waypoint.x += value
+                "W" -> waypoint.x -= value
+                "L" -> {
+                    waypoint = rotateWaypoint(waypoint, -value)
+                }
+                "R" -> {
+                   waypoint = rotateWaypoint(waypoint, value)
+                }
+                "F" -> {
+                    position.x += value * waypoint.x
+                    position.y += value * waypoint.y
+                }
+            }
+            /*
+            println("${action} ${value}")
+            println("${position.x}, ${position.y}")
+            println("(${waypoint.x}, ${waypoint.y})")*/
+        }
+        // println("${position.x}, ${position.y}")
+        val x = abs(position.x)
+        val y = abs(position.y)
+        val manhattan = x + y
+        println(manhattan)
+    }
+
+    private fun rotateWaypoint(waypoint: Position, value: Int): Position {
+        val currentX = waypoint.x
+        val currentY = waypoint.y
+        when(value % 360) {
+            0 ->  {
+                return Position(currentX, currentY)
+            }
+            90, -270 -> {
+                return Position(-currentY, currentX)
+            }
+            -180, 180 -> {
+                return Position(-currentX, -currentY)
+            }
+            -90, 270 -> {
+                return Position(currentY, -currentX)
+            }
+            else -> {
+                println("Woops!")
+                return Position(0,0)
+            }
+        }
     }
 
     class Position(var x: Int, var y: Int) {}

@@ -16,7 +16,7 @@ object Day13 {
      */
     @JvmStatic
     fun main(args: Array<String>) {
-        val scanner = start(13, false)
+        val scanner = start(13, true)
 
         // star1(scanner)
         star2(scanner)
@@ -88,7 +88,7 @@ object Day13 {
 
             val stepBus = 100000000000000L.toBigInteger() / step
             // val stepBus = 1000000L / step
-            println(stepBus)
+            // println(stepBus)
 
             val start = busses.mapIndexed { idx, it ->
                 if (it != "x") {
@@ -103,7 +103,7 @@ object Day13 {
                     BigInteger.ZERO
                 }
             }.filter { it != BigInteger.ZERO }.first()
-            println(start)
+            // println(start)
 
             val realBusses = busses.mapIndexed { idx, it ->
                 if (it != "x") {
@@ -115,11 +115,13 @@ object Day13 {
 
             var found = false
 
-            // val mod0 = busses.first().toLong()
-            var c = start // something good
+            val mod0 = busses.first().toBigInteger()
+            // var c = 100000000000000L.toBigInteger() // something good
+            var c = 1000L.toBigInteger() // something good
             // val max = busses.filter { it != "x" }.map { Integer.parseInt(it) }.max()!!.toLong()
             while (!found) {
-                c += step
+                // c += step
+                c++
 
                 var count = 0
                 val itr = realBusses.iterator()

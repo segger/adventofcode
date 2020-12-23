@@ -1,9 +1,9 @@
 # adventofcode
 
 ### 2020 - in progress
-**19** stars
+**27** stars
 
-**10** days
+**14** days
 
 ### 2019
 **19** stars

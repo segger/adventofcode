@@ -1,9 +1,12 @@
 # adventofcode
 
-### 2020 - in progress
-**27** stars
+## result during competition
+### 2020
+**30** stars
 
-**14** days
+**16** days
+
+![2020](resources/aoc_2020.png)
 
 ### 2019
 **19** stars

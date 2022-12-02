@@ -83,7 +83,7 @@ object Day13 {
             scanner.nextLine() // not used
             val busses = scanner.nextLine().split(",")
 
-            val step = busses.filter { it != "x" }.map { it.toBigInteger() }.max()!!
+            val step = busses.filter { it != "x" }.map { it.toBigInteger() }.maxOrNull()!!
             // println(step)
 
             val stepBus = 100000000000000L.toBigInteger() / step

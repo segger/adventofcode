@@ -75,8 +75,8 @@ object Day6 {
                 }
             }
         }
-        val max = definite.maxBy { it.value }
-        println(max!!.value)
+        val max = definite.maxOf { it.value }
+        println(max)
     }
 
     private fun star2(scanner: Scanner, distMax: Int) {

@@ -16,13 +16,13 @@ object Day4 {
 
     private fun star1(scanner: Scanner) {
         val boards = solve(scanner)
-        val winner = boards.minBy { it.first }!!
+        val winner = boards.minByOrNull { it.first }!!
         println("winner final score ${winner.second}")
     }
 
     private fun star2(scanner: Scanner) {
         val boards = solve(scanner)
-        val winner = boards.maxBy { it.first }!!
+        val winner = boards.maxByOrNull { it.first }!!
         println("loser final score ${winner.second}")
     }
 

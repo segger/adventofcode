@@ -215,6 +215,6 @@ object Day9 {
             }
         }
 
-        return playerScore.max()
+        return playerScore.maxOrNull()
     }
 }

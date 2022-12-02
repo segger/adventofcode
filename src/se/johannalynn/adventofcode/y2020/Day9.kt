@@ -94,8 +94,8 @@ object Day9 {
         }
 
         val range = numbers.subList(idxStart, idxStop)
-        val min = range.min()!!
-        val max = range.max()!!
+        val min = range.minOrNull()!!
+        val max = range.maxOrNull()!!
         // println("min $min max $max")
         val tot = min + max
         println(tot)

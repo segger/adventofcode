@@ -22,7 +22,7 @@ object Day2 {
             val row = scanner.nextLine().split("\\s".toRegex()).map {
                 it.trim().toInt()
             }
-            checksum += (row.max()!! - row.min()!!)
+            checksum += (row.maxOrNull()!! - row.minOrNull()!!)
         }
         println(checksum)
     }

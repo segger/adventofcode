@@ -10,7 +10,7 @@ object Day12 {
     fun main(args: Array<String>) {
         println("Day12")
 
-        val inFileName = "2018/input/day12_pre.txt"
+        val inFileName = "input/2018/day12_pre.txt"
         val scanner = Scanner(File(inFileName))
 
         star1(scanner);

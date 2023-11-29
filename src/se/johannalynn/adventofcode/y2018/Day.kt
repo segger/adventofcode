@@ -12,7 +12,7 @@ object Day {
         if (usePre)
             pre = "_pre"
 
-        val inFileName = "2018/input/day" + day + pre + ".txt"
+        val inFileName = "input/2018/day" + day + pre + ".txt"
         return Scanner(File(inFileName))
     }
 }

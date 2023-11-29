@@ -13,7 +13,7 @@ object Day3_converted {
         println("Day3_java")
 
         // #1 @ 1,3: 4x4
-        val inFileName = "2018/input/day3.txt"
+        val inFileName = "input/2018/day3.txt"
         val scanner = Scanner(File(inFileName))
 
         //star1(scanner);

@@ -12,7 +12,7 @@ public class Day3_java {
         System.out.println("Day3_java");
 
         // #1 @ 1,3: 4x4
-        String inFileName = "2018/input/day3.txt";
+        String inFileName = "input/2018/day3.txt";
         Scanner scanner = new Scanner(new File(inFileName));
 
         //star1(scanner);

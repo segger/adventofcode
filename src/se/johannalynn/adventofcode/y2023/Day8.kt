@@ -1,6 +1,7 @@
 package se.johannalynn.adventofcode.y2023
 
 import java.lang.System.exit
+import java.math.BigInteger
 import java.util.*
 
 /**
@@ -19,6 +20,14 @@ import java.util.*
  * AAA = (BBB, BBB)
  * BBB = (AAA, ZZZ)
  * ZZZ = (ZZZ, ZZZ)
+ *
+ * 1444534272 too low
+ * 2604005936768604160 too high
+ * 1185471578816454528
+ * 1302002968384302080 too high
+ * 11678319315857
+ *
+ * [15871, 21251, 16409, 11567, 18023, 14257]
  */
 object Day8 {
     @JvmStatic
@@ -27,6 +36,9 @@ object Day8 {
 
         // star1(scanner)
         star2(scanner)
+
+        // val input = Day.file(8, false)
+        // star2b(input.lines())
     }
 
     private fun star1(scanner: Scanner) {
@@ -61,6 +73,26 @@ object Day8 {
         println(steps)
     }
 
+    fun star2b(lines: List<String>) {
+        val steps = lines.first()
+
+        val map = lines.drop(2).associate { line ->
+            val (from, left, right) = """([A-Z]{3}) = \(([A-Z]{3}), ([A-Z]{3})\)""".toRegex().matchEntire(line)!!.groupValues.drop(1)
+            from to listOf(left, right)
+        }
+
+        val counts = map.keys.filter { it.endsWith("A") }.map { startingPoint ->
+            var current = startingPoint
+            var count = 0L
+            while (!current.endsWith("Z")) {
+                 steps.forEach { current = if (it == 'R') map[current]!![1] else map[current]!![0] }
+                 count += steps.length
+            }
+            count
+        }
+        println(counts)
+    }
+
     private fun star2(scanner: Scanner) {
         val adjacencyMap = mutableMapOf<String, Pair<String, String>>()
         val instruction = scanner.nextLine().split("").filter { it.isNotBlank() }
@@ -75,39 +107,66 @@ object Day8 {
 
             adjacencyMap[from] = Pair(left, right)
         }
-        var steps = 0
+        var steps = mutableListOf<Long>()
+        val currentNodes = adjacencyMap.filter { it.key.endsWith("A") }.keys.toList()
+
+        var nodeIdx = 0
         var idx = 0
-        var currentNodes = adjacencyMap.filter { it.key.endsWith("A") }.keys
-        println(currentNodes.size)
-        var allFound = false
-        while (!allFound && steps < 10000000) {
-            var found = true
-            currentNodes = currentNodes.map {
-                val node = when(instruction[idx % instruction.size]) {
-                    "L" -> {
-                        adjacencyMap[it]!!.first
-                    }
-                    "R" -> {
-                        adjacencyMap[it]!!.second
-                    }
-                    else -> {
-                        println("ERROR")
-                        exit(1)
-                    }
-                }
-                if (!node.toString().endsWith("Z")) {
-                    found = false
-                }
-                node.toString()
-            }.toSet()
 
-            if (found) {
-                allFound = true
+        var key = currentNodes[nodeIdx]
+        while (nodeIdx < currentNodes.size) {
+            val node = when(instruction[idx % instruction.size]) {
+                "L" -> {
+                    adjacencyMap[key]!!.first
+                }
+                "R" -> {
+                    adjacencyMap[key]!!.second
+                }
+                else -> {
+                    println("ERROR")
+                    exit(1)
+                    ""
+                }
             }
+            // println("node $node idx $idx instruction ${instruction[idx % instruction.size]}")
 
-            idx++
-            steps++
+            if (node.endsWith("Z")) {
+                idx++ // count first node
+                steps.add(idx.toLong())
+                idx = 0
+                if (nodeIdx + 1 < currentNodes.size) {
+                    key = currentNodes[++nodeIdx]
+                } else {
+                    nodeIdx++
+                }
+            } else {
+                key = node
+                idx++
+            }
         }
-        println(steps)
+
+        val lcm = steps.reduce { acc, it -> BigInteger(acc.toString()).lcm(BigInteger(it.toString())).toLong() }
+        println(lcm)
+
+        //println(steps)
+    }
+
+    private fun gcd(a: Long, b: Long): Long {
+        var num1 = a
+        var num2 = b
+        while (num2 > 0L) {
+            val temp = b
+            num2 = a % b
+            num1 = temp
+        }
+        return num1
+    }
+
+    private fun BigInteger.lcm(b: BigInteger): BigInteger {
+        return this / this.gcd(b) * b
+    }
+
+    private fun List<BigInteger>.lcm(): BigInteger {
+        return reduce { acc, bigInteger -> acc.lcm(bigInteger) }
     }
 }

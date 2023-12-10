@@ -2,6 +2,7 @@ package se.johannalynn.adventofcode.y2023
 
 import se.johannalynn.adventofcode.y2023.Day.start
 import java.util.*
+import kotlin.math.max
 
 object Day5 {
 
@@ -10,7 +11,8 @@ object Day5 {
         val scanner = start(5, false)
 
         // star1(scanner)
-        star2(scanner)
+        // star2(scanner)
+        star2b(scanner)
     }
 
     private fun star1(scanner: Scanner) {
@@ -153,5 +155,136 @@ object Day5 {
         }
         source.forEach { destination.add(it) } // aren't mapped correspond to the same destination
         println(destination.minOf { it.first })
+    }
+
+    private fun star2b(scanner: Scanner) {
+        // there is no overlap in resulting array!
+
+        val seedInput = scanner.nextLine().split(":")
+        val seeds = seedInput[1].trim().split(" ").map { it.toLong() }
+        scanner.nextLine()
+
+        val source = mutableListOf<LongRange>()
+        for (p in seeds.indices step 2) {
+            source.add(LongRange(seeds[p], seeds[p]+seeds[p+1] - 1))
+        }
+
+        val mappings = mutableListOf<LongArray>()
+        val newSource = mutableListOf<LongRange>()
+
+        var newMap = true
+        while (scanner.hasNextLine()) {
+            val input = scanner.nextLine()
+
+            // println("INPUT $input")
+
+            if (input.isEmpty()) {
+                newMap = true
+
+                // source.sortBy { it.first }
+                // mappings.sortBy { it[0] }
+
+                var i = 0
+                while (i < source.size) {
+                    var seed = source[i]
+                    for (mapping in mappings) {
+                        val start = mapping[0]
+                        val end = mapping[1]
+                        val conv = mapping[2] - mapping[0]
+                        // println("compare $seed with $start $end $conv")
+
+                        if (seed.first >= start && seed.last <= end) {
+                            // range inside mapping
+                            source[i] = LongRange(seed.first + conv, seed.last + conv)
+                            break
+                        } else if (seed.first < start && seed.last >= start) {
+                            // start is before, end is inside
+                            if (seed.last <= end) {
+                                // not fully overlap
+                                source[i] = LongRange(seed.first, start - 1)
+                                newSource.add(LongRange(start + conv, seed.last + conv))
+                            } else {
+                                // mapping inside range
+                                source[i] = LongRange(seed.first, start - 1)
+                                newSource.add(LongRange(start + conv, end + conv))
+                                source.add(i+1, LongRange(end + 1, seed.last))
+                            }
+                        } else if (seed.first in start..end) {
+                            // start is inside, end is after
+                            newSource.add(LongRange(seed.first + conv, end + conv))
+                            source[i] = LongRange(end + 1, seed.last)
+                        } else {
+                            // no match
+                        }
+                        seed = source[i]
+                    }
+
+                    i++
+                }
+
+                source.addAll(newSource)
+
+                source.sortBy { it.first }
+
+                newSource.clear()
+                mappings.clear()
+                continue
+            }
+            if (newMap) {
+                newMap = false
+            } else {
+                val values = input.split(" ")
+                val dest = values[0].toLong()
+                val src = values[1].toLong()
+                val length = values[2].toLong()
+
+                mappings.add(longArrayOf(src, src + length - 1, dest))
+            }
+        }
+
+        // source.sortBy { it.first }
+        // mappings.sortBy { it[0] }
+
+        var i = 0
+        while (i < source.size) {
+            var seed = source[i]
+            for (mapping in mappings) {
+                val start = mapping[0]
+                val end = mapping[1]
+                val conv = mapping[2] - mapping[0]
+                // println("compare $seed with $start $end $conv")
+
+                if (seed.first >= start && seed.last <= end) {
+                    // range inside mapping
+                    source[i] = LongRange(seed.first + conv, seed.last + conv)
+                    break
+                } else if (seed.first < start && seed.last >= start) {
+                    // start is before, end is inside
+                    if (seed.last <= end) {
+                        // not fully overlap
+                        source[i] = LongRange(seed.first, start - 1)
+                        newSource.add(LongRange(start + conv, seed.last + conv))
+                    } else {
+                        // mapping inside range
+                        source[i] = LongRange(seed.first, start - 1)
+                        newSource.add(LongRange(start + conv, end + conv))
+                        source.add(i+1, LongRange(end + 1, seed.last))
+                    }
+                } else if (seed.first in start..end) {
+                    // start is inside, end is after
+                    newSource.add(LongRange(seed.first + conv, end + conv))
+                    source[i] = LongRange(end + 1, seed.last)
+                } else {
+                    // no match
+                }
+                seed = source[i]
+            }
+
+            i++
+        }
+
+        source.addAll(newSource)
+
+        println(source.minOf { it.first })
     }
 }

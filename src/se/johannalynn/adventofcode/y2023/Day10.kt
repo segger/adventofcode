@@ -3,13 +3,19 @@ package se.johannalynn.adventofcode.y2023
 import java.lang.System.exit
 import java.util.*
 
+/**
+ * ..F7.
+ * .FJ|.
+ * SJ.L7
+ * |F--J
+ * LJ...
+ */
 object Day10 {
     @JvmStatic
     fun main(args: Array<String>) {
         val scanner = Day.start(10, false)
 
         star1(scanner)
-        // star2(scanner)
     }
 
     enum class Direction {
@@ -192,9 +198,5 @@ object Day10 {
         } else {
             println(totalDistance / 2 + 1)
         }
-    }
-
-    private fun star2(scanner: Scanner) {
-
     }
 }

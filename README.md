@@ -2,9 +2,21 @@
 
 ## result during competition
 
+### 2024
+
+### 2023
+**21** stars
+**11** days
+
 ### 2022
+**20** stars
+
+**10** days
 
 ### 2021
+**28** stars
+
+**16** days
 
 ### 2020
 **30** stars
